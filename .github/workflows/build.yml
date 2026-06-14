@@ -46,8 +46,4 @@ jobs:
       with:
         name: Android-Package-APK
         path: bin/*.apk
-    - name: Upload Finished APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Android-Package-APK
-        path: bin/*.apk
+        overwrite: true

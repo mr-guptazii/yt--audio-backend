@@ -37,10 +37,10 @@ class DownloaderApp(App):
         headers = {'Content-type': 'application/json'}
         params = json.dumps({"url": url})
 
-        # Safe asynchronous background web call
+        # Added timeout=100 to give the free server plenty of time to wake up
         UrlRequest(server_api, req_body=params, req_headers=headers, 
-                   on_success=self.on_api_success, on_failure=self.on_api_error, on_error=self.on_api_error)
-
+               on_success=self.on_api_success, on_failure=self.on_api_error, on_error=self.on_api_error,
+               timeout=100)
     def on_api_success(self, request, result):
         tracks = result.get("tracks", [])
         if not tracks:

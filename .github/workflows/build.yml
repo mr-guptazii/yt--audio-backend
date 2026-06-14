@@ -1,0 +1,43 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-state-size: false
+        python-version: '3.10'
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libffi-dev libssl-dev lld bzip2 \
+        ccache git zip unzip openjdk-17-jdk signfile libtinfo5
+
+    - name: Install Buildozer and Cython
+      run: |
+        pip install --upgrade pip
+        pip install "cython<3.0.0" buildozer
+
+    - name: Build APK with Buildozer
+      run: |
+        # Explicitly passing flags to avoid environment locks
+        export UV_SYSTEM_PYTHON=false
+        buildozer android debug
+
+    - name: Upload Finished APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Android-Package-APK
+        path: bin/*.apk

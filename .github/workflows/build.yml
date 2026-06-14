@@ -32,10 +32,17 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        # Explicitly passing flags to avoid environment locks
+        # Manually install platform-tools to guarantee aidl exists globally
+        sudo apt-get install -y android-sdk-platform-tools
+        
         export UV_SYSTEM_PYTHON=false
         buildozer android debug
 
+    - name: Upload Finished APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Android-Package-APK
+        path: bin/*.apk
     - name: Upload Finished APK Artifact
       uses: actions/upload-artifact@v4
       with:

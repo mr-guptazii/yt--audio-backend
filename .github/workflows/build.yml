@@ -32,9 +32,6 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        # Manually install platform-tools to guarantee aidl exists globally
-        sudo apt-get install -y android-sdk-platform-tools
-        
         export UV_SYSTEM_PYTHON=false
         buildozer android debug
 
